@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 const schema = z.object({
    
-  //number: z.string().min(1, { message: "Invoice number cannot be empty" }),
+  number: z.string().min(1, { message: "Invoice number cannot be empty" }),
   address: z.string().min(1, { message: "Address cannot be empty" }),
   city: z.string().min(1, { message: "City cannot be empty" }),
   postCode: z.string().min(1, { message: "Post code cannot be empty" }),
@@ -43,7 +43,7 @@ function InvoiceForm({ onCloseModal, selectedInvoice, onUpdateInvoice, onAddInvo
   
   const { register, handleSubmit, formState:{errors} } = useForm<FormFields>(
     {defaultValues: selectedInvoice ? selectedInvoice : {
-    //number: '',
+    number: '',
     address: '',
     city: '',
     postCode: '',
@@ -70,11 +70,20 @@ function InvoiceForm({ onCloseModal, selectedInvoice, onUpdateInvoice, onAddInvo
     if(selectedInvoice){
       onUpdateInvoice(data);
     }
+    else {
+      onAddInvoice(data);
+    }
   }
 
   return (
    <form onSubmit={handleSubmit(onSubmit)}>
     Bill From
+    <input 
+    {...register("number")}
+    type="text"
+    placeholder='Number'
+    />
+    {errors.number && <div className='text-red-500'>{errors.number.message}</div>}
     <input 
     {...register("address")}
     type="text"

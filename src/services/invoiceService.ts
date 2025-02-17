@@ -3,11 +3,15 @@ import { invoiceDummyData } from '../data/invoices';
 
 let invoices: Invoice[] = [...invoiceDummyData];
 
-export const getInvoices = (): Invoice[] => {
+export const getInvoices = (filter: number | null): Invoice[] => {
+  if (filter !== null) {
+    return invoices.filter(invoice => invoice.status === filter);
+  }
   return invoices;
 };
 
 export const addInvoice = (newInvoice: Omit<Invoice, 'id'>): Invoice => {
+  console.log(`trying to add invoce`)
   const newId = invoices.length > 0 ? Math.max(...invoices.map(inv => inv.id)) + 1 : 1;
   const invoiceWithId: Invoice = { ...newInvoice, id: newId };
   invoices = [...invoices, invoiceWithId];
@@ -24,7 +28,6 @@ export const editInvoice = (updatedInvoice: Invoice): Invoice | null => {
 };
 
 export const deleteInvoice = (id: number): Invoice[] => {
-  const initialLength = invoices.length;
   invoices = invoices.filter(inv => inv.id !== id);
   return invoices
 };

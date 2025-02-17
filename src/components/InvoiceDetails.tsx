@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Grid, Chip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { Invoice } from '../types/invoice';
+import { getInvoiceStatusChip } from '../utils/getInvoiceStatus';
 
 interface InvoiceDetailProps {
   invoice: Invoice;
@@ -14,16 +15,7 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack, handle
   
   const [openDialog, setOpenDialog] = useState(false);
 
-  const getStatusColor = (status: number) => {
-    switch (status) {
-      case 1:
-        return 'warning';
-      case 2:
-        return 'success';
-      default:
-        return 'default';
-    }
-  };
+  const status = getInvoiceStatusChip(invoice.status);
 
   const onEdit = () =>{
     setSelectedInvoice(invoice);
@@ -43,7 +35,7 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack, handle
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} p={2} boxShadow={1} borderRadius={2}>
         <Box display="flex" alignItems="center">
           <Typography>Status:</Typography>
-          <Chip label={invoice.status === 1 ? 'Pending' : 'Paid'} color={getStatusColor(invoice.status)} sx={{ ml: 1 }} />
+          <Chip label={status.label} color={status.color} />
         </Box>
         <Box>
           <Button variant="contained" onClick={onEdit} sx={{ mr: 1 }}>Edit</Button>

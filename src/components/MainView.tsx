@@ -10,8 +10,11 @@ import { addInvoice, deleteInvoice, editInvoice, getInvoices } from '../services
 
 function MainView() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [invoices, setInvoices] = useState<Invoice[]>(getInvoices);
+  const [filterStatus, setFilterStatus] = useState<number | null>(null);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  
+
+ const invoices = getInvoices(filterStatus);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);  
@@ -27,7 +30,25 @@ function MainView() {
 
 
   const handleAddInvoice = (newInvoice: Omit<Invoice, 'id'>) => {
-    addInvoice(newInvoice)
+    const invoiceToAdd:Omit<Invoice, 'id'> = {
+    number: newInvoice.number,
+    address: newInvoice.address,
+    city: newInvoice.city,
+    postCode: newInvoice.postCode,
+    country: newInvoice.country,
+    clientName: newInvoice.clientName,
+    clientEmail: newInvoice.clientEmail,
+    clientAddress: newInvoice.clientAddress,
+    clientCity: newInvoice.clientCity,
+    clientPostCode: newInvoice.clientPostCode,
+    clientCountry: newInvoice.clientCountry,
+    invoiceDate: new Date(),
+    paymentTerms: ``,
+    description: ``,
+    totalAmmount: 0,
+    status: 1
+    }
+    addInvoice(invoiceToAdd)
     handleCloseModal();
   };
 
@@ -37,7 +58,7 @@ function MainView() {
   };
 
   const handleDeleteInvoice = (id: number) => {
-    setInvoices(deleteInvoice(id));
+    deleteInvoice(id);
     setSelectedInvoice(null);
   }
 
@@ -50,6 +71,7 @@ function MainView() {
           invoices={invoices} 
           onViewInvoice={handleViewInvoice} 
           handleOpenModal = {handleOpenModal}
+          setFilterStatus= {setFilterStatus}
         />
       ) : (
         <InvoiceDetail

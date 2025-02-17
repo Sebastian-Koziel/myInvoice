@@ -1,4 +1,3 @@
-// components/InvoiceItem.tsx
 import ListItem from '@mui/material/ListItem';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -6,7 +5,7 @@ import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Invoice } from '../types/invoice';
-import { ListItemButton } from '@mui/material';
+import { getInvoiceStatusChip } from '../utils/getInvoiceStatus';
 
 interface InvoiceItemProps {
     invoice: Invoice;
@@ -14,7 +13,7 @@ interface InvoiceItemProps {
 }
 
 function InvoiceListItem({ invoice, onEditInvoice }: InvoiceItemProps) {
-    const status = "Paid"; // Domyślny status - możesz to zmienić w zależności od danych faktury
+    const status = getInvoiceStatusChip(invoice.status);
 
     return (
         <ListItem
@@ -40,7 +39,7 @@ function InvoiceListItem({ invoice, onEditInvoice }: InvoiceItemProps) {
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={3} style={{ textAlign: 'right' }}>
-                        <Chip label={status} color="success" size="small" />
+                        <Chip label={status.label} color={status.color} />
                     </Grid>
                     <Grid item xs={1} style={{ textAlign: 'right' }}>
                         <IconButton edge="end"   onClick={(event) => {
