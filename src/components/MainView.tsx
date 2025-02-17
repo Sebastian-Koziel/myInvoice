@@ -4,15 +4,13 @@ import InvoiceList from './InvoiceList';
 import InvoiceModal from './InvociceModal';
 import { Invoice } from '../types/invoice'; // Import interfejsu Faktura
 import InvoiceDetail from './InvoiceDetails';
-import { invoiceDummyData } from '../data/invoices';
+import { addInvoice, deleteInvoice, editInvoice, getInvoices } from '../services/invoiceService';
 
 
 
 function MainView() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [invoices, setInvoices] = useState<Invoice[]>(invoiceDummyData);
-  
-
+  const [invoices, setInvoices] = useState<Invoice[]>(getInvoices);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
 
   const handleOpenModal = () => {
@@ -23,36 +21,30 @@ function MainView() {
     setIsModalOpen(false);
   };
 
-  const handleAddInvoice = (newInvoice: Omit<Invoice, 'id'>) => {
-    const nowaFakturaZId: Invoice = { ...newInvoice, id: invoices.length + 1 } as Invoice;
-    setInvoices([...invoices, nowaFakturaZId]);
-    handleCloseModal();
-  };
-
-  const handleEditInvoice = (invoiceForEdit: Invoice) => {
-    console.log(`gonna edit`)
-    //setEditingInvoice(invoiceForEdit);
-    //setIsModalOpen(true);
-  };
-
   const handleViewInvoice = (invoice: Invoice) => {
     setSelectedInvoice(invoice);
   };
 
-  const handleUpdateInvoice = (zaktualizowanaFaktura: Invoice) => {
-    // Logika aktualizacji faktury w stanie
-    const zaktualizowaneFaktury = invoices.map(faktura =>
-      faktura.id === zaktualizowanaFaktura.id ? zaktualizowanaFaktura : faktura
-    );
-    setInvoices(zaktualizowaneFaktury);
+
+  const handleAddInvoice = (newInvoice: Omit<Invoice, 'id'>) => {
+    addInvoice(newInvoice)
     handleCloseModal();
   };
+
+  const handleUpdateInvoice = (updatedInvoice: Invoice) => {
+    editInvoice(updatedInvoice)
+    handleCloseModal();
+  };
+
+  const handleDeleteInvoice = (id: number) => {
+    setInvoices(deleteInvoice(id));
+    setSelectedInvoice(null);
+  }
 
 
   return (
     <div style={{ padding: '20px' }}>
         
-
         {!selectedInvoice ? (
         <InvoiceList 
           invoices={invoices} 
@@ -63,10 +55,12 @@ function MainView() {
         <InvoiceDetail
           invoice={selectedInvoice}
           onGoBack={() => setSelectedInvoice(null)}
-        />
+          handleOpenModal = {handleOpenModal}
+          setSelectedInvoice = {setSelectedInvoice}
+          handleDeleteInvoice = {handleDeleteInvoice}
+          />
       )}
       
-
       <InvoiceModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -74,9 +68,6 @@ function MainView() {
         onUpdateInvoice={handleUpdateInvoice}
         selectedInvoice = {selectedInvoice}
       />
-
-      
-
     </div>
   );
 }

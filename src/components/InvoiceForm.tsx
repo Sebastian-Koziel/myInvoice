@@ -8,25 +8,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 const schema = z.object({
    
-    number: z.string(),
-    address: z.string(),
-    city: z.string(),
-    postCode: z.string(),
-    country: z.string(),
+  //number: z.string().min(1, { message: "Invoice number cannot be empty" }),
+  address: z.string().min(1, { message: "Address cannot be empty" }),
+  city: z.string().min(1, { message: "City cannot be empty" }),
+  postCode: z.string().min(1, { message: "Post code cannot be empty" }),
+  country: z.string().min(1, { message: "Country cannot be empty" }),
 
-    clientName: z.string(),
-    clientEmail: z.string(),
-    clientAddress: z.string(),
-    clientCity: z.string(),
-    clientPostCode: z.string(),
-    clientCountry: z.string(),
+  clientName: z.string().min(1, { message: "Client name cannot be empty" }),
+  clientEmail: z.string().email({ message: "Invalid email format" }),
+  clientAddress: z.string().min(1, { message: "Client address cannot be empty" }),
+  clientCity: z.string().min(1, { message: "Client city cannot be empty" }),
+  clientPostCode: z.string().min(1, { message: "Client post code cannot be empty" }),
+  clientCountry: z.string().min(1, { message: "Client country cannot be empty" }),
 
-    invoiceDate: z.string(),
-    paymentTerms: z.string(),
+  //invoiceDate: z.string().min(1, { message: "Invoice date cannot be empty" }),
+  //paymentTerms: z.string().min(1, { message: "Payment terms cannot be empty" }),
 
-    description: z.string(),
+  //description: z.string().min(1, { message: "Description cannot be empty" }),
 
-    totalAmmount: z.number()
+  //totalAmmount: z.string().min(1, { message: "Ammount cannot be empty" }),
 })
 
 type FormFields = z.infer<typeof schema>;
@@ -39,17 +39,37 @@ interface InvoiceFormProps {
     selectedInvoice: Invoice | null;
   }
 
-function InvoiceForm({ onCloseModal, selectedInvoice }:InvoiceFormProps) {
+function InvoiceForm({ onCloseModal, selectedInvoice, onUpdateInvoice, onAddInvoice }:InvoiceFormProps) {
   
   const { register, handleSubmit, formState:{errors} } = useForm<FormFields>(
     {defaultValues: selectedInvoice ? selectedInvoice : {
-      
+    //number: '',
+    address: '',
+    city: '',
+    postCode: '',
+    country: '',
+
+    clientName: '',
+    clientEmail: '',
+    clientAddress: '',
+    clientCity: '',
+    clientPostCode: '',
+    clientCountry: '',
+
+    //invoiceDate: '',
+    //paymentTerms: '',
+
+    //description:'',
+
+    //totalAmmount:'',
     },
     resolver: zodResolver(schema)}
   );
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    console.log(data);
+    if(selectedInvoice){
+      onUpdateInvoice(data);
+    }
   }
 
   return (

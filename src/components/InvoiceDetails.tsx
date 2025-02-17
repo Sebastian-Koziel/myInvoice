@@ -1,13 +1,19 @@
-import React from 'react';
-import { Box, Typography, Button, Grid, Chip } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Button, Grid, Chip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { Invoice } from '../types/invoice';
 
 interface InvoiceDetailProps {
   invoice: Invoice;
   onGoBack: ()=> void;
+  handleOpenModal: () => void;
+  setSelectedInvoice: (invoice: Invoice) => void
+  handleDeleteInvoice: (id: number) => void
 }
 
-const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack }) => {
+const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack, handleOpenModal, setSelectedInvoice, handleDeleteInvoice }) => {
+  
+  const [openDialog, setOpenDialog] = useState(false);
+
   const getStatusColor = (status: number) => {
     switch (status) {
       case 1:
@@ -17,6 +23,17 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack }) => {
       default:
         return 'default';
     }
+  };
+
+  const onEdit = () =>{
+    setSelectedInvoice(invoice);
+    handleOpenModal()
+  }
+  const onDelete = () => setOpenDialog(true);
+
+  const handleConfirmDelete = () => {
+    handleDeleteInvoice(invoice.id);
+    setOpenDialog(false);
   };
 
   return (
@@ -29,11 +46,22 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack }) => {
           <Chip label={invoice.status === 1 ? 'Pending' : 'Paid'} color={getStatusColor(invoice.status)} sx={{ ml: 1 }} />
         </Box>
         <Box>
-          <Button variant="contained" sx={{ mr: 1 }}>Edit</Button>
-          <Button variant="contained" color="error" sx={{ mr: 1 }}>Delete</Button>
+          <Button variant="contained" onClick={onEdit} sx={{ mr: 1 }}>Edit</Button>
+          <Button variant="contained" onClick={onDelete}color="error" sx={{ mr: 1 }}>Delete</Button>
           <Button variant="contained" color="primary">Mark as Paid</Button>
         </Box>
       </Box>
+
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Are you sure you want to delete this invoice?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="primary">Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error">Delete</Button>
+        </DialogActions>
+      </Dialog>
 
       <Box mt={4} p={4} boxShadow={2} borderRadius={2}>
         <Grid container spacing={2}>
