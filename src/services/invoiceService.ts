@@ -11,20 +11,21 @@ export const getInvoices = (filter: number | null): Invoice[] => {
 };
 
 export const addInvoice = (newInvoice: Omit<Invoice, 'id'>): Invoice => {
-  console.log(`trying to add invoce`)
   const newId = invoices.length > 0 ? Math.max(...invoices.map(inv => inv.id)) + 1 : 1;
   const invoiceWithId: Invoice = { ...newInvoice, id: newId };
   invoices = [...invoices, invoiceWithId];
   return invoiceWithId;
 };
 
-export const editInvoice = (updatedInvoice: Invoice): Invoice | null => {
+export const editInvoice = (updatedInvoice: Invoice) => {
   const index = invoices.findIndex(inv => inv.id === updatedInvoice.id);
-  if (index !== -1) {
-    invoices[index] = updatedInvoice;
-    return updatedInvoice;
-  }
-  return null;
+    if (index !== -1) {
+        invoices[index] = updatedInvoice; 
+        return updatedInvoice;
+    }
+    else {
+      throw new Error(`Error changing status: Invoice with id ${updatedInvoice.id} not found.`);
+    }
 };
 
 export const deleteInvoice = (id: number): Invoice[] => {
@@ -32,11 +33,17 @@ export const deleteInvoice = (id: number): Invoice[] => {
   return invoices
 };
 
-export const updateInvoiceStatus = (id: number, status: number): Invoice | null => {
+export const changeStatus = (id: number, newStatus: number): Invoice => {
   const index = invoices.findIndex(inv => inv.id === id);
-  if (index !== -1) {
-    invoices[index] = { ...invoices[index], status };
-    return invoices[index];
+  if(index === -1){
+    throw new Error(`Error changing status: Invoice with id ${id} not found.`); 
   }
-  return null;
+
+  const oldInvoice = invoices[index];
+  const updatedInvoice = { ...oldInvoice, status: newStatus }; 
+
+  invoices[index] = updatedInvoice;
+
+  return updatedInvoice;
 };
+

@@ -1,6 +1,5 @@
 import { Invoice } from "../types/invoice";
 
-// Przykładowe dane faktur (możesz przenieść do osobnego pliku data/invoices.ts)
 export let invoiceDummyData: Invoice[] = [
     {
         id: 1,

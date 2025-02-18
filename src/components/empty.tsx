@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import nothingHere from '../assets/nothingHere.webp';
 
 
-const EmptyState: React.FC = () => {
+function EmptyState() {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" padding={5}>
       <img src={nothingHere} alt="Empty State" style={{ width: '200px', marginBottom: '20px' }} />

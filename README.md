@@ -1,50 +1,43 @@
-# React + TypeScript + Vite
+# Invoice Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+The Invoice Management App is a web application built with React, TypeScript, and MUI that helps users manage invoices efficiently. The app displays a list of invoices with filtering capabilities by status. Users can add new invoices, save them as drafts, or send them to recipients. Each invoice can be viewed in detail, where users can update its status if it's pending, edit it if it's a draft, or delete it from the list.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies and Tools Used
+- **React** with functional components for building the UI
+- **TypeScript** for type safety and better code quality
+- **MUI (Material-UI)** for pre-styled components and a consistent design system
+- **React Hooks:**
+  - `useState` for managing component-level state
+  - `useEffect` for handling side effects like data fetching or state updates
+- **Prop Drilling** to pass data between components
+- **Conditional Rendering** for displaying different views based on application state
+- **React Hook Form** for managing form state and validation
+- **Zod** for schema-based form validation
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Key Features and Logic
+### Main View Logic
+The main view component handles the core logic of the app, determining whether to display the invoice list or detailed view of a selected invoice. It manages user interactions like adding, editing, and deleting invoices.
 
-- Configure the top-level `parserOptions` property like this:
+### Invoice Service
+A custom service mimics a basic backend by managing invoice operations, including fetching, adding, updating, and deleting invoices.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Utilities
+Utility functions handle the generation of status chips for invoices, providing consistent styling and quick visual cues. They also generate invoice summaries for easy tracking.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Invoice Form
+The form component supports both adding new invoices and editing existing ones. It uses React Hook Form and Zod to ensure data integrity and validation.
+- **Dual-submit functionality:** Two submit buttons allow saving an invoice as either "pending" or "draft," enhancing flexibility.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Additional Enhancements
+- Structured code for scalability, ensuring that services and utilities can be easily extended or replaced with a real backend in the future.
+- Implemented status management via a dedicated service that returns appropriate classes and text labels.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+---
+
+This project demonstrates clean component-based architecture, effective state management with hooks, and robust form handling with validation.
+

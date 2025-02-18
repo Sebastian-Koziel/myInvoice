@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Typography, Button, Grid, Chip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { Invoice } from '../types/invoice';
 import { getInvoiceStatusChip } from '../utils/getInvoiceStatus';
@@ -9,11 +9,13 @@ interface InvoiceDetailProps {
   handleOpenModal: () => void;
   setSelectedInvoice: (invoice: Invoice) => void
   handleDeleteInvoice: (id: number) => void
+  handleStatusChange: (id: number) => void
 }
 
-const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack, handleOpenModal, setSelectedInvoice, handleDeleteInvoice }) => {
+function InvoiceDetail({ invoice, onGoBack, handleOpenModal, setSelectedInvoice, handleDeleteInvoice, handleStatusChange }:InvoiceDetailProps){
   
   const [openDialog, setOpenDialog] = useState(false);
+  
 
   const status = getInvoiceStatusChip(invoice.status);
 
@@ -28,6 +30,11 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack, handle
     setOpenDialog(false);
   };
 
+  const onMarkasPaid = () => {
+    handleStatusChange(invoice.id);
+    
+  }
+
   return (
     <Box p={4}>
       <Button variant="text" onClick={onGoBack}>&larr; Go back</Button>
@@ -38,9 +45,13 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack, handle
           <Chip label={status.label} color={status.color} />
         </Box>
         <Box>
+        {invoice.status === 3 &&
           <Button variant="contained" onClick={onEdit} sx={{ mr: 1 }}>Edit</Button>
+        }
           <Button variant="contained" onClick={onDelete}color="error" sx={{ mr: 1 }}>Delete</Button>
-          <Button variant="contained" color="primary">Mark as Paid</Button>
+          {invoice.status === 1 &&
+          <Button variant="contained" onClick={onMarkasPaid}color="primary">Mark as Paid</Button>
+          }
         </Box>
       </Box>
 
@@ -93,7 +104,7 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice, onGoBack, handle
                 <Grid item xs={2}><Typography fontWeight="bold">QTY.</Typography></Grid>
                 <Grid item xs={2}><Typography fontWeight="bold">Price</Typography></Grid>
                 <Grid item xs={2}><Typography fontWeight="bold">Total</Typography></Grid>
-                {/* Hardcoded example items */}
+                {/* TO DO -> add more items later*/}
                 <Grid item xs={6}><Typography>Banner Design</Typography></Grid>
                 <Grid item xs={2}><Typography>1</Typography></Grid>
                 <Grid item xs={2}><Typography>£156.00</Typography></Grid>

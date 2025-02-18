@@ -27,6 +27,8 @@ const schema = z.object({
   //description: z.string().min(1, { message: "Description cannot be empty" }),
 
   //totalAmmount: z.string().min(1, { message: "Ammount cannot be empty" }),
+  
+  
 })
 
 type FormFields = z.infer<typeof schema>;
@@ -35,7 +37,7 @@ type FormFields = z.infer<typeof schema>;
 interface InvoiceFormProps {
     onCloseModal: () => void;
     onAddInvoice: (newInvoice: any) => void;
-    onUpdateInvoice: (updatedInvoce: any) => void;
+    onUpdateInvoice: (updatedInvoce: Invoice) => void;
     selectedInvoice: Invoice | null;
   }
 
@@ -66,9 +68,15 @@ function InvoiceForm({ onCloseModal, selectedInvoice, onUpdateInvoice, onAddInvo
     resolver: zodResolver(schema)}
   );
 
+  const onSubmitHandler = (data:FormFields, status:number) => {
+    const newData = {...data, status}
+    onSubmit(newData);
+  }
+
   const onSubmit: SubmitHandler<FormFields> = (data) => {
+    
     if(selectedInvoice){
-      onUpdateInvoice(data);
+      onUpdateInvoice({ ...selectedInvoice, ...data });
     }
     else {
       onAddInvoice(data);
@@ -157,8 +165,13 @@ function InvoiceForm({ onCloseModal, selectedInvoice, onUpdateInvoice, onAddInvo
     {errors.clientCountry && <div>{errors.clientCountry.message}</div>}
 
     <button type="button" onClick={onCloseModal}>Cancel</button>
-    <button type="submit">Submit</button>
-   </form> 
+    <button type="button" onClick={() => handleSubmit((data) => onSubmitHandler(data, 1))()}>
+     Save as Pending
+    </button>
+    <button type="button" onClick={() => handleSubmit((data) => onSubmitHandler(data, 3))()}>
+    Save as Draft
+    </button>
+    </form> 
     
    
   );

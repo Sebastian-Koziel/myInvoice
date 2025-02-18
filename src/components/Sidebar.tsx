@@ -20,7 +20,6 @@ function Sidebar() {
         <Typography variant="h6">
           Aplikacja Faktury
         </Typography>
-        {/* Możesz dodać tutaj elementy menu w przyszłości */}
       </div>
     </Drawer>
   );

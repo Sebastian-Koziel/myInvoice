@@ -43,8 +43,8 @@ function InvoiceListItem({ invoice, onEditInvoice }: InvoiceItemProps) {
                     </Grid>
                     <Grid item xs={1} style={{ textAlign: 'right' }}>
                         <IconButton edge="end"   onClick={(event) => {
-                            event.stopPropagation(); // Prevent ListItem's onClick from also firing
-                            onEditInvoice(invoice); // Call the correct onEditInvoice prop with invoice data
+                            event.stopPropagation();
+                            onEditInvoice(invoice);
                             }} aria-label="details">
                             <ArrowForwardIcon />
                         </IconButton>

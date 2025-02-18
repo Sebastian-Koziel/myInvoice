@@ -1,8 +1,7 @@
-// components/InvoiceList.tsx
 import React, { useState } from 'react';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import { Invoice } from '../types/invoice'; // Import interfejsu Faktura
+import { Invoice } from '../types/invoice';
 import InvoiceListItem from './InvoiceListItem';
 import { Box, Button, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import EmptyState from './empty';
